@@ -1,0 +1,46 @@
+<o-form-layout-manager attr="Room" mode="tab" title="ROOM">
+    <div fxFill fxLayout="column" fxLayoutAlign="start">
+        <o-table 
+            attr="RoomTable" 
+            service="Room" 
+            entity="Room" 
+            title="ROOM"
+            keys="id"
+            columns="id;hotel_id;number;Type;price_per_night" 
+            header-actions="R;D"
+            visible-columns="id;hotel_id;number;Type;price_per_night"  
+            sort-columns="id" 
+            query-rows="20" 
+            quick-filter="yes"
+            row-height="medium" 
+            select-all-checkbox="true" 
+            pageable="yes"  
+            auto-adjust="true" 
+            virtual-scroll="yes" 
+            edition-mode="dblclick"
+            horizontal-scroll="yes"
+            show-title="yes"
+            export-button="yes">
+            
+            <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            
+            <o-table-column attr="hotel_id" title="hotel_id">
+    <o-table-cell-renderer-service attr="hotel_id" 
+        service="Hotel" entity="HotelType" columns="id;name"
+        parent-keys="id:hotel_id"
+        value-column="name" keys="hotel_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-table-column #number attr="number" title="number" editable="no" required="yes" content-align="left"></o-table-column>
+            
+            <o-table-column #Type attr="Type" title="Type" editable="no" required="yes" content-align="left"></o-table-column>
+            
+            <o-table-column #price_per_night attr="price_per_night" title="price_per_night" type="integer" editable="no" required="yes" content-align="center"></o-table-column>
+            
+            <o-table-context-menu></o-table-context-menu>
+            <o-table-paginator page-size-options="24;48;96"></o-table-paginator>
+        </o-table>
+    </div>
+</o-form-layout-manager>

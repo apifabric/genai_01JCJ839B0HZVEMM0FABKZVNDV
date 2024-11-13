@@ -1,0 +1,68 @@
+{
+    "models": [
+        {
+            "classname": "Hotel",
+            "code": "class Hotel(Base):\n    \"\"\"\n    description: Table to store hotel branches\n    \"\"\"\n    __tablename__ = 'hotel'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(100), nullable=False)\n    address = Column(String(200), nullable=False)\n    contact_number = Column(String(15), nullable=False)",
+            "description": "Table to store hotel branches",
+            "name": "hotel"
+        },
+        {
+            "classname": "Room",
+            "code": "class Room(Base):\n    \"\"\"\n    description: Table to store rooms available in the hotel\n    \"\"\"\n    __tablename__ = 'room'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    hotel_id = Column(Integer, ForeignKey('hotel.id'), nullable=False)\n    number = Column(String(10), nullable=False)\n    type = Column(String(50), nullable=False)\n    price_per_night = Column(Integer, nullable=False)",
+            "description": "Table to store rooms available in the hotel",
+            "name": "room"
+        },
+        {
+            "classname": "Guest",
+            "code": "class Guest(Base):\n    \"\"\"\n    description: Table to store guest information\n    \"\"\"\n    __tablename__ = 'guest'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    first_name = Column(String(50), nullable=False)\n    last_name = Column(String(50), nullable=False)\n    phone_number = Column(String(15), nullable=False)\n    email = Column(String(100), nullable=True)\n",
+            "description": "Table to store guest information",
+            "name": "guest"
+        },
+        {
+            "classname": "Reservation",
+            "code": "class Reservation(Base):\n    \"\"\"\n    description: Table to store reservation details\n    \"\"\"\n    __tablename__ = 'reservation'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    guest_id = Column(Integer, ForeignKey('guest.id'), nullable=False)\n    room_id = Column(Integer, ForeignKey('room.id'), nullable=False)\n    check_in_date = Column(Date, nullable=False)\n    check_out_date = Column(Date, nullable=False)\n    total_amount = Column(Integer, nullable=False)\n",
+            "description": "Table to store reservation details",
+            "name": "reservation"
+        },
+        {
+            "classname": "Service",
+            "code": "class Service(Base):\n    \"\"\"\n    description: Table to store services offered by the hotel\n    \"\"\"\n    __tablename__ = 'service'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(100), nullable=False)\n    price = Column(Integer, nullable=False)\n",
+            "description": "Table to store services offered by the hotel",
+            "name": "service"
+        },
+        {
+            "classname": "ReservationService",
+            "code": "class ReservationService(Base):\n    \"\"\"\n    description: Table to link reservations with services\n    \"\"\"\n    __tablename__ = 'reservation_service'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    reservation_id = Column(Integer, ForeignKey('reservation.id'), nullable=False)\n    service_id = Column(Integer, ForeignKey('service.id'), nullable=False)",
+            "description": "Table to link reservations with services",
+            "name": "reservation_service"
+        },
+        {
+            "classname": "Employee",
+            "code": "class Employee(Base):\n    \"\"\"\n    description: Table to store employee information in the hotel\n    \"\"\"\n    __tablename__ = 'employee'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    hotel_id = Column(Integer, ForeignKey('hotel.id'), nullable=False)\n    first_name = Column(String(50), nullable=False)\n    last_name = Column(String(50), nullable=False)\n    role = Column(String(50), nullable=False)\n    salary = Column(Integer, nullable=False)",
+            "description": "Table to store employee information in the hotel",
+            "name": "employee"
+        },
+        {
+            "classname": "MaintenanceRequest",
+            "code": "class MaintenanceRequest(Base):\n    \"\"\"\n    description: Table to store maintenance requests for rooms\n    \"\"\"\n    __tablename__ = 'maintenance_request'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    room_id = Column(Integer, ForeignKey('room.id'), nullable=False)\n    description = Column(String(200), nullable=False)\n    status = Column(String(50), nullable=False)\n    request_date = Column(Date, nullable=False)",
+            "description": "Table to store maintenance requests for rooms",
+            "name": "maintenance_request"
+        },
+        {
+            "classname": "Payment",
+            "code": "class Payment(Base):\n    \"\"\"\n    description: Table to store payment details for reservations\n    \"\"\"\n    __tablename__ = 'payment'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    reservation_id = Column(Integer, ForeignKey('reservation.id'), nullable=False)\n    amount = Column(Integer, nullable=False)\n    date = Column(Date, nullable=False)\n    method = Column(String(50), nullable=False)",
+            "description": "Table to store payment details for reservations",
+            "name": "payment"
+        }
+    ],
+    "rules": [
+        {
+            "name": "Reservation.total_amount",
+            "description": "Calculate total amount of a reservation as room price per night times the number of nights stayed",
+            "use_case": "Reservation total amount calculation",
+            "code": "Rule.formula(derive=Reservation.total_amount, \nas_expression=lambda row: (row.check_out_date - row.check_in_date).days * row.room.price_per_night)"
+        }
+    ],
+    "test_data": "# Test Data for `Hotel` class\nhotel1 = Hotel(name='Grand Plaza', address='123 Main St, Cityville', contact_number='123-456-7890')\nhotel2 = Hotel(name='Sunny Inn', address='456 Beach Rd, Sunnyvale', contact_number='123-456-7891')\nhotel3 = Hotel(name='Mountain Retreat', address='789 Hilltop Ave, Mountainview', contact_number='123-456-7892')\nhotel4 = Hotel(name='Urban Suite', address='101 City St, Metropolis', contact_number='123-456-7893')\n\n# Test Data for `Room` class\nroom1 = Room(hotel_id=1, number='101', type='Suite', price_per_night=200)\nroom2 = Room(hotel_id=1, number='102', type='Single', price_per_night=120)\nroom3 = Room(hotel_id=2, number='105', type='Suite', price_per_night=220)\nroom4 = Room(hotel_id=3, number='201', type='Double', price_per_night=150)\n\n# Test Data for `Guest` class\nguest1 = Guest(first_name='John', last_name='Doe', phone_number='555-1234', email='john@example.com')\nguest2 = Guest(first_name='Jane', last_name='Smith', phone_number='555-5678', email='jane@example.com')\nguest3 = Guest(first_name='Sam', last_name='Wright', phone_number='555-8765', email='sam@example.com')\nguest4 = Guest(first_name='Alex', last_name='Brown', phone_number='555-4321', email='alex@example.com')\n\n# Test Data for `Reservation` class\nreservation1 = Reservation(guest_id=1, room_id=1, check_in_date=date(2024, 1, 10), check_out_date=date(2024, 1, 15), total_amount=1000)\nreservation2 = Reservation(guest_id=2, room_id=2, check_in_date=date(2024, 2, 1), check_out_date=date(2024, 2, 3), total_amount=240)\nreservation3 = Reservation(guest_id=3, room_id=3, check_in_date=date(2024, 3, 5), check_out_date=date(2024, 3, 10), total_amount=1100)\nreservation4 = Reservation(guest_id=4, room_id=4, check_in_date=date(2024, 4, 15), check_out_date=date(2024, 4, 18), total_amount=450)\n\n# Test Data for `Service` class\nservice1 = Service(name='Room Service', price=50)\nservice2 = Service(name='Massage', price=80)\nservice3 = Service(name='Laundry', price=30)\nservice4 = Service(name='Breakfast', price=25)\n\n# Test Data for `ReservationService` class\nreservation_service1 = ReservationService(reservation_id=1, service_id=1)\nreservation_service2 = ReservationService(reservation_id=2, service_id=2)\nreservation_service3 = ReservationService(reservation_id=3, service_id=3)\nreservation_service4 = ReservationService(reservation_id=4, service_id=4)\n\n# Test Data for `Employee` class\nemployee1 = Employee(hotel_id=1, first_name='Michael', last_name='Scott', role='Manager', salary=50000)\nemployee2 = Employee(hotel_id=2, first_name='Jim', last_name='Halpert', role='Receptionist', salary=30000)\nemployee3 = Employee(hotel_id=3, first_name='Pam', last_name='Beesly', role='Designer', salary=35000)\nemployee4 = Employee(hotel_id=4, first_name='Dwight', last_name='Schrute', role='Security', salary=32000)\n\n# Test Data for `MaintenanceRequest` class\nmaintenance_request1 = MaintenanceRequest(room_id=1, description='Air conditioning repair', status='Pending', request_date=date(2024, 1, 12))\nmaintenance_request2 = MaintenanceRequest(room_id=2, description='Plumbing issue', status='Completed', request_date=date(2024, 1, 20))\nmaintenance_request3 = MaintenanceRequest(room_id=3, description='Wi-Fi connectivity problem', status='InProgress', request_date=date(2024, 2, 5))\nmaintenance_request4 = MaintenanceRequest(room_id=4, description='Room cleaning', status='Pending', request_date=date(2024, 3, 15))\n\n# Test Data for `Payment` class\npayment1 = Payment(reservation_id=1, amount=1000, date=date(2024, 1, 16), method='Credit Card')\npayment2 = Payment(reservation_id=2, amount=240, date=date(2024, 2, 4), method='Cash')\npayment3 = Payment(reservation_id=3, amount=1100, date=date(2024, 3, 11), method='Credit Card')\npayment4 = Payment(reservation_id=4, amount=450, date=date(2024, 4, 19), method='Debit Card')",
+    "name": "HotelManagementSystem"
+}

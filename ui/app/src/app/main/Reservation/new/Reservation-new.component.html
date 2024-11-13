@@ -1,0 +1,60 @@
+<o-form #ReservationForm attr="Reservation_form_insert" service="Reservation" entity="Reservation" 
+keys="id" fxLayout="column" show-header="yes" header-actions="I"
+horizontal-scroll="yes"
+after-insert-mode="new" class="standalone-form-container" (onInsertMode)="onInsertMode()">
+
+<o-row attr="row1" layout-align="start stretch">
+  <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">
+    
+        <o-integer-input #id attr="id" label=" id*" type="integer" editable="no" required="no" ></o-integer-input>
+      
+        <o-list-picker 
+        attr="guest_id"
+        service="Guest" 
+        entity="GuestType"
+        fxFlex="30" 
+        query-on-init="no" 
+        query-on-bind="yes" 
+        required="yes" 
+        enabled="yes" 
+        filter="yes"
+        value-column="id" 
+        value-column-type="INTEGER"  
+        keys="id" 
+        columns="id;guest_id;first_name" 
+        title="guest_id"
+        visible-columns="id;first_name" 
+        separator=" - " width="680px" class="form-field">
+</o-list-picker>
+      
+        <o-list-picker 
+        attr="room_id"
+        service="Room" 
+        entity="RoomType"
+        fxFlex="30" 
+        query-on-init="no" 
+        query-on-bind="yes" 
+        required="yes" 
+        enabled="yes" 
+        filter="yes"
+        value-column="id" 
+        value-column-type="INTEGER"  
+        keys="id" 
+        columns="id;room_id;id" 
+        title="room_id"
+        visible-columns="id;id" 
+        separator=" - " width="680px" class="form-field">
+</o-list-picker>
+      
+        <o-date-input #check_in_date attr="check_in_date" type="date" label="check_in_date" enabled="yes" required="yes" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+      
+        <o-date-input #check_out_date attr="check_out_date" type="date" label="check_out_date" enabled="yes" required="yes" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+      
+        <o-currency-input #total_amount attr="total_amount" title="total_amount" type="currency" editable="no" required="yes" currency-symbol="$" currency-symbol-position="left" thousand-separator="," decimal-separator="."></o-currency-input>
+      
+</div>
+</o-row>
+
+<div layout-padding></div>
+
+</o-form>

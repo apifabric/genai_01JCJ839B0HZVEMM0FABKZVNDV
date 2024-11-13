@@ -1,0 +1,95 @@
+<div class="container">
+<o-form-container breadcrumb="yes" breadcrumb-label-columns="first_name" breadcrumb-separator=", " class="fill-form">
+      <o-form #form attr="Guest_form_edit" 
+        service="Guest" 
+        entity="Guest" 
+        fxLayout="column" 
+        show-header="yes" 
+        header-actions="R;I;U;D"
+        #oDetailForm keys="id" 
+        keys-sql-types="INTEGER" 
+        show-header-navigation="yes"
+        (onDataLoaded)="onDataLoaded($event)">
+
+  <o-row attr="row1" layout-align="start stretch">
+    <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">
+      
+      <o-text-input #first_name attr="first_name" label=" first_name*" enabled="yes" required="yes" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-text-input #last_name attr="last_name" label="last_name" enabled="yes" required="yes" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-text-input #phone_number attr="phone_number" label="phone_number" enabled="yes" required="yes" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-text-input #email attr="email" label="email" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-integer-input #id attr="id" label="id" type="integer" editable="no" required="no" ></o-integer-input>
+      
+    </div>
+  </o-row>
+      
+      <mat-tab-group fxFill>
+        
+        <mat-tab label="RESERVATION-guest_id">
+    <div layout-padding>
+      <o-table 
+        attr="ReservationTable" 
+        service="Reservation" 
+        entity="Reservation" 
+        keys="id"
+        parent-keys="guest_id:id"
+        columns="id;guest_id;room_id;check_in_date;check_out_date;total_amount"  
+        horizontal-scroll="yes"
+        detail-form-route="Reservation" 
+        edit-form-route="Reservation"
+        visible-columns="id;guest_id;room_id;check_in_date;check_out_date;total_amount"  
+        sort-columns="id" 
+        query-rows="25" 
+        quick-filter="yes"
+        row-height="medium" 
+        select-all-checkbox="true" 
+        pageable="yes"  
+        auto-adjust="true" 
+        virtual-scroll="yes" 
+        insert-button="yes" 
+        delete-button="yes" 
+        fixed-header="true" 
+        class="vertical-padding-8"
+        edition-mode="dblclick" 
+        horizontal-scroll="yes" class="fill-form">
+        
+          <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+        
+          <o-table-column attr="guest_id" title="guest_id">
+    <o-table-cell-renderer-service attr="guest_id" 
+        service="Guest" entity="GuestType" columns="id;first_name"
+        parent-keys="id:guest_id"
+        value-column="first_name" keys="guest_id"
+        visible-columns="first_name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+        
+          <o-table-column attr="room_id" title="room_id">
+    <o-table-cell-renderer-service attr="room_id" 
+        service="Room" entity="RoomType" columns="id;id"
+        parent-keys="id:room_id"
+        value-column="id" keys="room_id"
+        visible-columns="id" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+        
+          <o-date-input #check_in_date attr="check_in_date" type="date" label="check_in_date" enabled="yes" required="yes" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+        
+          <o-date-input #check_out_date attr="check_out_date" type="date" label="check_out_date" enabled="yes" required="yes" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+        
+          <o-table-column #total_amount attr="total_amount" title="total_amount" type="currency" editable="no" required="yes" currency-symbol="$" currency-symbol-position="left" thousand-separator=","decimal-separator="."></o-table-column>
+        
+        <o-table-paginator page-size-options="25;50;100"></o-table-paginator>
+      </o-table>
+    </div>
+</mat-tab>
+        
+      </mat-tab-group>
+      
+    </o-form>
+  </o-form-container>
+</div>

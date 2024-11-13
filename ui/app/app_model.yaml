@@ -1,0 +1,432 @@
+about:
+  date: November 13, 2024 07:53:08
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+entities:
+  Employee:
+    columns:
+    - label: ' first_name*'
+      name: first_name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(50)
+    - name: hotel_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: last_name
+      required: true
+      template: text
+      type: VARCHAR(50)
+    - name: role
+      required: true
+      template: text
+      type: VARCHAR(50)
+    - name: salary
+      required: true
+      template: integer
+      type: INTEGER
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table to store employee information in the hotel
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: first_name
+    home_template: home_template.html
+    info_list: Table to store employee information in the hotel
+    label: Employee
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - hotel_id
+      name: hotel
+      resource: Hotel
+    type: Employee
+  Guest:
+    columns:
+    - label: ' first_name*'
+      name: first_name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(50)
+    - name: last_name
+      required: true
+      template: text
+      type: VARCHAR(50)
+    - name: phone_number
+      required: true
+      template: text
+      type: VARCHAR(15)
+    - name: email
+      template: text
+      type: VARCHAR(100)
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table to store guest information
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: first_name
+    home_template: home_template.html
+    info_list: Table to store guest information
+    label: Guest
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - guest_id
+      name: ReservationList
+      resource: Reservation
+    type: Guest
+  Hotel:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(100)
+    - name: address
+      required: true
+      template: text
+      type: VARCHAR(200)
+    - name: contact_number
+      required: true
+      template: text
+      type: VARCHAR(15)
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table to store hotel branches
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Table to store hotel branches
+    label: Hotel
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - hotel_id
+      name: EmployeeList
+      resource: Employee
+    - direction: tomany
+      fks:
+      - hotel_id
+      name: RoomList
+      resource: Room
+    type: Hotel
+  MaintenanceRequest:
+    columns:
+    - label: ' description*'
+      name: description
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(200)
+    - name: room_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: status
+      required: true
+      template: text
+      type: VARCHAR(50)
+    - name: request_date
+      required: true
+      type: DATE
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table to store maintenance requests for rooms
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: description
+    home_template: home_template.html
+    info_list: Table to store maintenance requests for rooms
+    label: MaintenanceRequest
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - room_id
+      name: room
+      resource: Room
+    type: MaintenanceRequest
+  Payment:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: reservation_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: amount
+      required: true
+      template: integer
+      type: INTEGER
+    - name: date
+      required: true
+      type: DATE
+    - name: method
+      required: true
+      template: text
+      type: VARCHAR(50)
+    description: Table to store payment details for reservations
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table to store payment details for reservations
+    label: Payment
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - reservation_id
+      name: reservation
+      resource: Reservation
+    type: Payment
+  Reservation:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: guest_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: room_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: check_in_date
+      required: true
+      type: DATE
+    - name: check_out_date
+      required: true
+      type: DATE
+    - name: total_amount
+      required: true
+      template: integer
+      type: INTEGER
+    description: Table to store reservation details
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table to store reservation details
+    label: Reservation
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - reservation_id
+      name: PaymentList
+      resource: Payment
+    - direction: tomany
+      fks:
+      - reservation_id
+      name: ReservationServiceList
+      resource: ReservationService
+    - direction: toone
+      fks:
+      - guest_id
+      name: guest
+      resource: Guest
+    - direction: toone
+      fks:
+      - room_id
+      name: room
+      resource: Room
+    type: Reservation
+  ReservationService:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: reservation_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: service_id
+      required: true
+      template: integer
+      type: INTEGER
+    description: Table to link reservations with services
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table to link reservations with services
+    label: ReservationService
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - reservation_id
+      name: reservation
+      resource: Reservation
+    - direction: toone
+      fks:
+      - service_id
+      name: service
+      resource: Service
+    type: ReservationService
+  Room:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: hotel_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: number
+      required: true
+      template: text
+      type: VARCHAR(10)
+    - name: Type
+      required: true
+      template: text
+      type: VARCHAR(50)
+    - name: price_per_night
+      required: true
+      template: integer
+      type: INTEGER
+    description: Table to store rooms available in the hotel
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table to store rooms available in the hotel
+    label: Room
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - room_id
+      name: MaintenanceRequestList
+      resource: MaintenanceRequest
+    - direction: tomany
+      fks:
+      - room_id
+      name: ReservationList
+      resource: Reservation
+    - direction: toone
+      fks:
+      - hotel_id
+      name: hotel
+      resource: Hotel
+    type: Room
+  Service:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(100)
+    - name: price
+      required: true
+      template: integer
+      type: INTEGER
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table to store services offered by the hotel
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Table to store services offered by the hotel
+    label: Service
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - service_id
+      name: ReservationServiceList
+      resource: ReservationService
+    type: Service
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: false
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    mode: tab
+    pick_style: list
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: false

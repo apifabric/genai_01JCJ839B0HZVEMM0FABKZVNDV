@@ -1,0 +1,98 @@
+{
+    "models": [
+        {
+            "classname": "Hotel",
+            "code": "class Hotel(Base):\n    \"\"\"description: Stores information about hotels.\"\"\"\n    __tablename__ = 'hotels'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    address = Column(String, nullable=False)\n    star_rating = Column(Integer, nullable=False)\n    total_room_count = Column(Integer)  # For storing the sum of all hotel's room count",
+            "description": "Stores information about hotels.",
+            "name": "Hotel"
+        },
+        {
+            "classname": "Room",
+            "code": "class Room(Base):\n    \"\"\"description: Represents individual rooms within hotels.\"\"\"\n    __tablename__ = 'rooms'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    hotel_id = Column(Integer, ForeignKey('hotels.id'), nullable=False)\n    room_number = Column(String, nullable=False)\n    room_type = Column(String, nullable=False)\n    price = Column(Decimal, nullable=False)\n    status = Column(String, nullable=False)  # e.g., available, occupied",
+            "description": "Represents individual rooms within hotels.",
+            "name": "Room"
+        },
+        {
+            "classname": "Guest",
+            "code": "class Guest(Base):\n    \"\"\"description: Details for guests staying at the hotel.\"\"\"\n    __tablename__ = 'guests'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    first_name = Column(String, nullable=False)\n    last_name = Column(String, nullable=False)\n    phone_number = Column(String)\n    email = Column(String)\n    booking_count = Column(Integer)  # For storing count of bookings by the guest\n",
+            "description": "Details for guests staying at the hotel.",
+            "name": "Guest"
+        },
+        {
+            "classname": "Booking",
+            "code": "class Booking(Base):\n    \"\"\"description: Information about room bookings by guests.\"\"\"\n    __tablename__ = 'bookings'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    room_id = Column(Integer, ForeignKey('rooms.id'), nullable=False)\n    guest_id = Column(Integer, ForeignKey('guests.id'), nullable=False)\n    check_in_date = Column(DateTime, nullable=False)\n    check_out_date = Column(DateTime, nullable=False)\n    total_cost = Column(Decimal)  # Sum of Room.price * duration of stay\n",
+            "description": "Information about room bookings by guests.",
+            "name": "Booking"
+        },
+        {
+            "classname": "Amenity",
+            "code": "class Amenity(Base):\n    \"\"\"description: Amenities available in hotels.\"\"\"\n    __tablename__ = 'amenities'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)  # e.g., Wi-Fi, Pool\n    description = Column(String)\n",
+            "description": "Amenities available in hotels.",
+            "name": "Amenity"
+        },
+        {
+            "classname": "HotelAmenity",
+            "code": "class HotelAmenity(Base):\n    \"\"\"description: Junction table linking hotels with their available amenities.\"\"\"\n    __tablename__ = 'hotel_amenities'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    hotel_id = Column(Integer, ForeignKey('hotels.id'), nullable=False)\n    amenity_id = Column(Integer, ForeignKey('amenities.id'), nullable=False)\n",
+            "description": "Junction table linking hotels with their available amenities.",
+            "name": "HotelAmenity"
+        },
+        {
+            "classname": "Employee",
+            "code": "class Employee(Base):\n    \"\"\"description: Employees working at the hotel.\"\"\"\n    __tablename__ = 'employees'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    hotel_id = Column(Integer, ForeignKey('hotels.id'), nullable=False)\n    first_name = Column(String, nullable=False)\n    last_name = Column(String, nullable=False)\n    position = Column(String, nullable=False)  # e.g., Manager, Housekeeping\n    salary = Column(Integer, nullable=False)\n",
+            "description": "Employees working at the hotel.",
+            "name": "Employee"
+        },
+        {
+            "classname": "Service",
+            "code": "class Service(Base):\n    \"\"\"description: Services provided within the hotel (e.g., cleaning, room service).\"\"\"\n    __tablename__ = 'services'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    description = Column(String)\n    cost = Column(Decimal, nullable=False)\n",
+            "description": "Services provided within the hotel (e.g., cleaning, room service).",
+            "name": "Service"
+        },
+        {
+            "classname": "ServiceLog",
+            "code": "class ServiceLog(Base):\n    \"\"\"description: Log of services requested by guests.\"\"\"\n    __tablename__ = 'service_logs'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    booking_id = Column(Integer, ForeignKey('bookings.id'), nullable=False)\n    service_id = Column(Integer, ForeignKey('services.id'), nullable=False)\n    date_requested = Column(DateTime, nullable=False)\n    status = Column(String, nullable=False)  # e.g., completed, pending\n",
+            "description": "Log of services requested by guests.",
+            "name": "ServiceLog"
+        },
+        {
+            "classname": "Payment",
+            "code": "class Payment(Base):\n    \"\"\"description: Payments made by guests for bookings and services.\"\"\"\n    __tablename__ = 'payments'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    guest_id = Column(Integer, ForeignKey('guests.id'), nullable=False)\n    booking_id = Column(Integer, ForeignKey('bookings.id'))\n    service_log_id = Column(Integer, ForeignKey('service_logs.id'))\n    amount = Column(Decimal, nullable=False)\n    payment_date = Column(DateTime, nullable=False)\n    method = Column(String, nullable=False)  # e.g., credit card, cash\n",
+            "description": "Payments made by guests for bookings and services.",
+            "name": "Payment"
+        },
+        {
+            "classname": "Complaint",
+            "code": "class Complaint(Base):\n    \"\"\"description: Complaints from guests regarding service or facilities.\"\"\"\n    __tablename__ = 'complaints'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    guest_id = Column(Integer, ForeignKey('guests.id'), nullable=False)\n    booking_id = Column(Integer, ForeignKey('bookings.id'), nullable=False)\n    date_filed = Column(DateTime, nullable=False)\n    description = Column(String, nullable=False)\n    status = Column(String, nullable=False)  # e.g., resolved, unresolved\n",
+            "description": "Complaints from guests regarding service or facilities.",
+            "name": "Complaint"
+        },
+        {
+            "classname": "Maintenance",
+            "code": "class Maintenance(Base):\n    \"\"\"description: Records of maintenance activities for rooms and facilities.\"\"\"\n    __tablename__ = 'maintenance'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    room_id = Column(Integer, ForeignKey('rooms.id'))\n    date_scheduled = Column(DateTime, nullable=False)\n    date_completed = Column(DateTime)\n    description = Column(String, nullable=False)\n    status = Column(String, nullable=False)  # e.g., completed, scheduled\n",
+            "description": "Records of maintenance activities for rooms and facilities.",
+            "name": "Maintenance"
+        }
+    ],
+    "rules": [
+        {
+            "name": "Hotel Total Room Count",
+            "description": "Calculates the total number of rooms in a hotel.",
+            "use_case": "Business rule to aggregate the number of rooms for a hotel.",
+            "code": "Rule.sum(derive=Hotel.total_room_count, as_sum_of=Room.id)"
+        },
+        {
+            "name": "Guest Booking Count",
+            "description": "Count bookings made by a guest.",
+            "use_case": "Enforce that the booking count correctly reflects the number of bookings made by the guest.",
+            "code": "Rule.count(derive=Guest.booking_count, as_count_of=Booking)"
+        },
+        {
+            "name": "Booking Total Cost",
+            "description": "Calculates total cost based on room price and duration of stay.",
+            "use_case": "To derive the total cost of booking by considering room price and stay duration.",
+            "code": "Rule.formula(derive=Booking.total_cost, as_expression=lambda row: row.Room.price * (row.check_out_date - row.check_in_date).days)"
+        }
+    ],
+    "test_data": "from datetime import date\n\n# Hotel Test Data\nhotel1 = Hotel(id=1, name=\"Grand Palace\", address=\"123 King St\", star_rating=5, total_room_count=10)\nhotel2 = Hotel(id=2, name=\"Ocean View\", address=\"456 Sea Rd\", star_rating=4, total_room_count=15)\nhotel3 = Hotel(id=3, name=\"Mountain Retreat\", address=\"789 Hill Ln\", star_rating=3, total_room_count=20)\nhotel4 = Hotel(id=4, name=\"City Center\", address=\"101 Urban Dr\", star_rating=4, total_room_count=25)\n\n# Room Test Data\nroom1 = Room(id=1, hotel_id=1, room_number=\"101\", room_type=\"Deluxe\", price=200, status=\"available\")\nroom2 = Room(id=2, hotel_id=1, room_number=\"102\", room_type=\"Standard\", price=150, status=\"occupied\")\nroom3 = Room(id=3, hotel_id=2, room_number=\"201\", room_type=\"Suite\", price=300, status=\"available\")\nroom4 = Room(id=4, hotel_id=2, room_number=\"202\", room_type=\"Single\", price=100, status=\"occupied\")\n\n# Guest Test Data\nguest1 = Guest(id=1, first_name=\"John\", last_name=\"Doe\", phone_number=\"123456789\", email=\"johndoe@example.com\", booking_count=2)\nguest2 = Guest(id=2, first_name=\"Jane\", last_name=\"Smith\", phone_number=\"987654321\", email=\"janesmith@example.com\", booking_count=1)\nguest3 = Guest(id=3, first_name=\"Jim\", last_name=\"Beam\", phone_number=\"234567890\", email=\"jimbeam@example.com\", booking_count=1)\nguest4 = Guest(id=4, first_name=\"Jack\", last_name=\"Daniel\", phone_number=\"345678901\", email=\"jackdaniel@example.com\", booking_count=0)\n\n# Booking Test Data\nbooking1 = Booking(id=1, room_id=1, guest_id=1, check_in_date=date(2023, 11, 1), check_out_date=date(2023, 11, 5), total_cost=800)\nbooking2 = Booking(id=2, room_id=2, guest_id=1, check_in_date=date(2023, 11, 6), check_out_date=date(2023, 11, 10), total_cost=600)\nbooking3 = Booking(id=3, room_id=3, guest_id=2, check_in_date=date(2023, 11, 3), check_out_date=date(2023, 11, 7), total_cost=1200)\nbooking4 = Booking(id=4, room_id=4, guest_id=3, check_in_date=date(2023, 11, 8), check_out_date=date(2023, 11, 12), total_cost=400)\n\n# Amenity Test Data\namenity1 = Amenity(id=1, name=\"Wi-Fi\", description=\"High-speed internet\")\namenity2 = Amenity(id=2, name=\"Pool\", description=\"Olympic-sized swimming pool\")\namenity3 = Amenity(id=3, name=\"Gym\", description=\"Fully equipped gym\")\namenity4 = Amenity(id=4, name=\"Spa\", description=\"Relaxing wellness spa\")\n\n# HotelAmenity Test Data\nhotel_amenity1 = HotelAmenity(id=1, hotel_id=1, amenity_id=1)\nhotel_amenity2 = HotelAmenity(id=2, hotel_id=1, amenity_id=2)\nhotel_amenity3 = HotelAmenity(id=3, hotel_id=2, amenity_id=3)\nhotel_amenity4 = HotelAmenity(id=4, hotel_id=3, amenity_id=4)\n\n# Employee Test Data\nemployee1 = Employee(id=1, hotel_id=1, first_name=\"Alice\", last_name=\"Johnson\", position=\"Manager\", salary=50000)\nemployee2 = Employee(id=2, hotel_id=1, first_name=\"Bob\", last_name=\"Lee\", position=\"Housekeeping\", salary=30000)\nemployee3 = Employee(id=3, hotel_id=2, first_name=\"Charlie\", last_name=\"Brown\", position=\"Receptionist\", salary=35000)\nemployee4 = Employee(id=4, hotel_id=3, first_name=\"Dana\", last_name=\"White\", position=\"Chef\", salary=40000)\n\n# Service Test Data\nservice1 = Service(id=1, name=\"Room Service\", description=\"Deluxe menu available 24/7\", cost=50)\nservice2 = Service(id=2, name=\"Laundry\", description=\"Fast and reliable service\", cost=20)\nservice3 = Service(id=3, name=\"Tour Guide\", description=\"Explore local attractions\", cost=100)\nservice4 = Service(id=4, name=\"Car Rental\", description=\"Premium vehicles available\", cost=150)\n\n# ServiceLog Test Data\nservice_log1 = ServiceLog(id=1, booking_id=1, service_id=1, date_requested=date(2023, 11, 2), status=\"completed\")\nservice_log2 = ServiceLog(id=2, booking_id=2, service_id=2, date_requested=date(2023, 11, 6), status=\"completed\")\nservice_log3 = ServiceLog(id=3, booking_id=3, service_id=3, date_requested=date(2023, 11, 4), status=\"pending\")\nservice_log4 = ServiceLog(id=4, booking_id=4, service_id=4, date_requested=date(2023, 11, 9), status=\"pending\")\n\n# Payment Test Data\npayment1 = Payment(id=1, guest_id=1, booking_id=1, amount=800, payment_date=date(2023, 11, 1), method=\"credit card\")\npayment2 = Payment(id=2, guest_id=1, booking_id=2, amount=600, payment_date=date(2023, 11, 6), method=\"credit card\")\npayment3 = Payment(id=3, guest_id=2, booking_id=3, amount=1200, payment_date=date(2023, 11, 3), method=\"cash\")\npayment4 = Payment(id=4, guest_id=3, booking_id=4, amount=400, payment_date=date(2023, 11, 8), method=\"cash\")\n\n# Complaint Test Data\ncomplaint1 = Complaint(id=1, guest_id=1, booking_id=1, date_filed=date(2023, 11, 2), description=\"Aircon not working\", status=\"resolved\")\ncomplaint2 = Complaint(id=2, guest_id=2, booking_id=3, date_filed=date(2023, 11, 4), description=\"Room service delay\", status=\"unresolved\")\ncomplaint3 = Complaint(id=3, guest_id=3, booking_id=4, date_filed=date(2023, 11, 9), description=\"Shower not draining\", status=\"resolved\")\ncomplaint4 = Complaint(id=4, guest_id=4, booking_id=2, date_filed=date(2023, 11, 7), description=\"TV remote missing\", status=\"unresolved\")\n\n# Maintenance Test Data\nmaintenance1 = Maintenance(id=1, room_id=1, date_scheduled=date(2023, 11, 1), date_completed=date(2023, 11, 2), description=\"Monthly aircon maintenance\", status=\"completed\")\nmaintenance2 = Maintenance(id=2, room_id=2, date_scheduled=date(2023, 11, 2), date_completed=date(2023, 11, 3), description=\"Shower repair\", status=\"completed\")\nmaintenance3 = Maintenance(id=3, room_id=3, date_scheduled=date(2023, 11, 10), description=\"Re-carpeting\", status=\"scheduled\")\nmaintenance4 = Maintenance(id=4, room_id=4, date_scheduled=date(2023, 11, 11), description=\"Wi-Fi upgrade\", status=\"scheduled\")",
+    "name": "hotel_mgmt"
+}

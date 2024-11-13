@@ -1,0 +1,136 @@
+<div class="container">
+<o-form-container breadcrumb="yes" breadcrumb-label-columns="name" breadcrumb-separator=", " class="fill-form">
+      <o-form #form attr="Hotel_form_edit" 
+        service="Hotel" 
+        entity="Hotel" 
+        fxLayout="column" 
+        show-header="yes" 
+        header-actions="R;I;U;D"
+        #oDetailForm keys="id" 
+        keys-sql-types="INTEGER" 
+        show-header-navigation="yes"
+        (onDataLoaded)="onDataLoaded($event)">
+
+  <o-row attr="row1" layout-align="start stretch">
+    <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">
+      
+      <o-text-input #name attr="name" label=" name*" enabled="yes" required="yes" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-text-input #address attr="address" label="address" enabled="yes" required="yes" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-text-input #contact_number attr="contact_number" label="contact_number" enabled="yes" required="yes" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-integer-input #id attr="id" label="id" type="integer" editable="no" required="no" ></o-integer-input>
+      
+    </div>
+  </o-row>
+      
+      <mat-tab-group fxFill>
+        
+        <mat-tab label="EMPLOYEE-hotel_id">
+    <div layout-padding>
+      <o-table 
+        attr="EmployeeTable" 
+        service="Employee" 
+        entity="Employee" 
+        keys="id"
+        parent-keys="hotel_id:id"
+        columns="first_name;hotel_id;last_name;role;salary;id"  
+        horizontal-scroll="yes"
+        detail-form-route="Employee" 
+        edit-form-route="Employee"
+        visible-columns="first_name;hotel_id;last_name;role;salary;id"  
+        sort-columns="first_name" 
+        query-rows="25" 
+        quick-filter="yes"
+        row-height="medium" 
+        select-all-checkbox="true" 
+        pageable="yes"  
+        auto-adjust="true" 
+        virtual-scroll="yes" 
+        insert-button="yes" 
+        delete-button="yes" 
+        fixed-header="true" 
+        class="vertical-padding-8"
+        edition-mode="dblclick" 
+        horizontal-scroll="yes" class="fill-form">
+        
+          <o-table-column #first_name attr="first_name" title=" first_name*" editable="no" required="yes" content-align="left"></o-table-column>
+        
+          <o-table-column attr="hotel_id" title="hotel_id">
+    <o-table-cell-renderer-service attr="hotel_id" 
+        service="Hotel" entity="HotelType" columns="id;name"
+        parent-keys="id:hotel_id"
+        value-column="name" keys="hotel_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+        
+          <o-table-column #last_name attr="last_name" title="last_name" editable="no" required="yes" content-align="left"></o-table-column>
+        
+          <o-table-column #role attr="role" title="role" editable="no" required="yes" content-align="left"></o-table-column>
+        
+          <o-table-column #salary attr="salary" title="salary" type="integer" editable="no" required="yes" content-align="center"></o-table-column>
+        
+          <o-table-column #id attr="id" title="id" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+        
+        <o-table-paginator page-size-options="25;50;100"></o-table-paginator>
+      </o-table>
+    </div>
+</mat-tab>
+        
+        <mat-tab label="ROOM-hotel_id">
+    <div layout-padding>
+      <o-table 
+        attr="RoomTable" 
+        service="Room" 
+        entity="Room" 
+        keys="id"
+        parent-keys="hotel_id:id"
+        columns="id;hotel_id;number;Type;price_per_night"  
+        horizontal-scroll="yes"
+        detail-form-route="Room" 
+        edit-form-route="Room"
+        visible-columns="id;hotel_id;number;Type;price_per_night"  
+        sort-columns="id" 
+        query-rows="25" 
+        quick-filter="yes"
+        row-height="medium" 
+        select-all-checkbox="true" 
+        pageable="yes"  
+        auto-adjust="true" 
+        virtual-scroll="yes" 
+        insert-button="yes" 
+        delete-button="yes" 
+        fixed-header="true" 
+        class="vertical-padding-8"
+        edition-mode="dblclick" 
+        horizontal-scroll="yes" class="fill-form">
+        
+          <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+        
+          <o-table-column attr="hotel_id" title="hotel_id">
+    <o-table-cell-renderer-service attr="hotel_id" 
+        service="Hotel" entity="HotelType" columns="id;name"
+        parent-keys="id:hotel_id"
+        value-column="name" keys="hotel_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+        
+          <o-table-column #number attr="number" title="number" editable="no" required="yes" content-align="left"></o-table-column>
+        
+          <o-table-column #Type attr="Type" title="Type" editable="no" required="yes" content-align="left"></o-table-column>
+        
+          <o-table-column #price_per_night attr="price_per_night" title="price_per_night" type="integer" editable="no" required="yes" content-align="center"></o-table-column>
+        
+        <o-table-paginator page-size-options="25;50;100"></o-table-paginator>
+      </o-table>
+    </div>
+</mat-tab>
+        
+      </mat-tab-group>
+      
+    </o-form>
+  </o-form-container>
+</div>

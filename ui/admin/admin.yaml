@@ -1,0 +1,290 @@
+about:
+  date: November 13, 2024 07:53:08
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 8
+  number_tables: 9
+info_toggle_checked: true
+resources:
+  Employee:
+    attributes:
+    - label: ' first_name*'
+      name: first_name
+      required: true
+      search: true
+      sort: true
+    - name: hotel_id
+      required: true
+    - name: last_name
+      required: true
+    - name: role
+      required: true
+    - name: salary
+      required: true
+    - name: id
+    description: Table to store employee information in the hotel
+    info_list: Table to store employee information in the hotel
+    tab_groups:
+    - direction: toone
+      fks:
+      - hotel_id
+      name: hotel
+      resource: Hotel
+    type: Employee
+    user_key: first_name
+  Guest:
+    attributes:
+    - label: ' first_name*'
+      name: first_name
+      required: true
+      search: true
+      sort: true
+    - name: last_name
+      required: true
+    - name: phone_number
+      required: true
+    - name: email
+    - name: id
+    description: Table to store guest information
+    info_list: Table to store guest information
+    tab_groups:
+    - direction: tomany
+      fks:
+      - guest_id
+      name: ReservationList
+      resource: Reservation
+    type: Guest
+    user_key: first_name
+  Hotel:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: address
+      required: true
+    - name: contact_number
+      required: true
+    - name: id
+    description: Table to store hotel branches
+    info_list: Table to store hotel branches
+    tab_groups:
+    - direction: tomany
+      fks:
+      - hotel_id
+      name: EmployeeList
+      resource: Employee
+    - direction: tomany
+      fks:
+      - hotel_id
+      name: RoomList
+      resource: Room
+    type: Hotel
+    user_key: name
+  MaintenanceRequest:
+    attributes:
+    - label: ' description*'
+      name: description
+      required: true
+      search: true
+      sort: true
+    - name: room_id
+      required: true
+    - name: status
+      required: true
+    - name: request_date
+      required: true
+      type: DATE
+    - name: id
+    description: Table to store maintenance requests for rooms
+    info_list: Table to store maintenance requests for rooms
+    tab_groups:
+    - direction: toone
+      fks:
+      - room_id
+      name: room
+      resource: Room
+    type: MaintenanceRequest
+    user_key: description
+  Payment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: reservation_id
+      required: true
+    - name: amount
+      required: true
+    - name: date
+      required: true
+      type: DATE
+    - name: method
+      required: true
+    description: Table to store payment details for reservations
+    info_list: Table to store payment details for reservations
+    tab_groups:
+    - direction: toone
+      fks:
+      - reservation_id
+      name: reservation
+      resource: Reservation
+    type: Payment
+    user_key: id
+  Reservation:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: guest_id
+      required: true
+    - name: room_id
+      required: true
+    - name: check_in_date
+      required: true
+      type: DATE
+    - name: check_out_date
+      required: true
+      type: DATE
+    - name: total_amount
+      required: true
+    description: Table to store reservation details
+    info_list: Table to store reservation details
+    tab_groups:
+    - direction: tomany
+      fks:
+      - reservation_id
+      name: PaymentList
+      resource: Payment
+    - direction: tomany
+      fks:
+      - reservation_id
+      name: ReservationServiceList
+      resource: ReservationService
+    - direction: toone
+      fks:
+      - guest_id
+      name: guest
+      resource: Guest
+    - direction: toone
+      fks:
+      - room_id
+      name: room
+      resource: Room
+    type: Reservation
+    user_key: id
+  ReservationService:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: reservation_id
+      required: true
+    - name: service_id
+      required: true
+    description: Table to link reservations with services
+    info_list: Table to link reservations with services
+    tab_groups:
+    - direction: toone
+      fks:
+      - reservation_id
+      name: reservation
+      resource: Reservation
+    - direction: toone
+      fks:
+      - service_id
+      name: service
+      resource: Service
+    type: ReservationService
+    user_key: id
+  Room:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: hotel_id
+      required: true
+    - name: number
+      required: true
+    - name: Type
+      required: true
+    - name: price_per_night
+      required: true
+    description: Table to store rooms available in the hotel
+    info_list: Table to store rooms available in the hotel
+    tab_groups:
+    - direction: tomany
+      fks:
+      - room_id
+      name: MaintenanceRequestList
+      resource: MaintenanceRequest
+    - direction: tomany
+      fks:
+      - room_id
+      name: ReservationList
+      resource: Reservation
+    - direction: toone
+      fks:
+      - hotel_id
+      name: hotel
+      resource: Hotel
+    type: Room
+    user_key: id
+  Service:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: price
+      required: true
+    - name: id
+    description: Table to store services offered by the hotel
+    info_list: Table to store services offered by the hotel
+    tab_groups:
+    - direction: tomany
+      fks:
+      - service_id
+      name: ReservationServiceList
+      resource: ReservationService
+    type: Service
+    user_key: name
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'
